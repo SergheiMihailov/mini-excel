@@ -22,7 +22,7 @@
           if (expr[i] >= "A" && expr[i] <= "Z") {
             expr[i] = `parseInt(document.getElementById("${expr[i]}${
               expr[i + 1]
-            }"))`;
+            }").value)`;
             expr.splice(i + 1, 1);
           }
         }
