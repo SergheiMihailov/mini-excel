@@ -3,6 +3,14 @@
     <title>Tiny Excel</title>
   </head>
   <body>
+    <div id="info-container">
+      <p>This is an attempt to create Excel in 60 minutes / lines of code.</p>
+      <p>It supports basic arithmetic formulas and cell references.</p>
+      <p>
+        Try, for instance, giving values to A1:A3 and setting A4 "=(A1+A2)*A3"
+      </p>
+      <button id="close-tip">Close tip</button>
+    </div>
     <div id="container"></div>
     <script>
       const evaluate_expression = (expr) => {
@@ -88,6 +96,12 @@
             row.append(newCell);
           }
         }
+
+        document
+          .getElementById("close-tip")
+          .addEventListener("click", () =>
+            document.getElementById("info-container").remove()
+          );
       }
     </script>
   </body>
@@ -109,6 +123,19 @@
     input:focus {
       outline: 3px solid rgb(40, 155, 92);
       z-index: 1;
+    }
+    #info-container {
+      z-index: 2;
+      background-color: rgb(40, 155, 92);
+      color: white;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      width: 300px;
+      height: 200px;
+      position: fixed;
+      left: 100px;
+      top: 150px;
+      padding: 20px;
+      padding-bottom: 40px;
     }
   </style>
 </html>
