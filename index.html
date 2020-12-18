@@ -37,6 +37,9 @@
         event.target.value = evaluate_expression(event.target.value);
       };
 
+      const onfocusout = (event) =>
+        (event.target.value = evaluate_expression(event.target.value));
+
       const onfocus = (event) => {
         j = event.target.id.charCodeAt(0);
         i = parseInt(event.target.id.slice(1));
@@ -92,6 +95,7 @@
             newCell.id = String.fromCharCode(64 + j) + i;
             newCell.addEventListener("change", onchange);
             newCell.addEventListener("focus", onfocus);
+            newCell.addEventListener("focusout", onfocusout);
             newCell.addEventListener("keydown", onenter);
             row.append(newCell);
           }
