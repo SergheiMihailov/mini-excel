@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>Tiny Excel</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      const evaluate_expression = (expr) => {
+        if (expr[0] != "=" || expr.length < 1) {
+          return expr;
+        }
+        expr = expr.split("").slice(1);
+        for (let i = 0; i < expr.length - 1; i++) {
+          if (expr[i] >= "A" && expr[i] <= "Z") {
+            expr[i] = `parseInt(document.getElementById("${expr[i]}${
+              expr[i + 1]
+            }"))`;
+            expr.splice(i + 1, 1);
+          }
+        }
+        expr = expr.join("");
+        return eval(expr);
+      };
+
+      const onchange = (event) => {
+        j = event.target.id.charCodeAt(0);
+        i = parseInt(event.target.id.slice(1));
+        values[i][j] = event.target.value;
+        event.target.value = evaluate_expression(event.target.value);
+      };
+
+      const onfocus = (event) => {
+        j = event.target.id.charCodeAt(0);
+        i = parseInt(event.target.id.slice(1));
+        event.target.value = values[i][j] ? values[i][j] : "";
+      };
+
+      const onenter = (event) => {
+        j = event.target.id.slice(0, 1);
+        i = parseInt(event.target.id.slice(1));
+        switch (event.key) {
+          case "Enter":
+          case "ArrowDown":
+          case "Down":
+            document.getElementById(j + (i + 1)).focus();
+            break;
+          case "ArrowUp":
+          case "Up":
+            document.getElementById(j + (i - 1)).focus();
+            break;
+          case "ArrowLeft":
+          case "Left":
+            document
+              .getElementById(String.fromCharCode(j.charCodeAt(0) - 1) + i)
+              .focus();
+            if (j <= "B") {
+              document.getElementById("container").scr = 0;
+            }
+            break;
+          case "ArrowRight":
+          case "Right":
+            document
+              .getElementById(String.fromCharCode(j.charCodeAt(0) + 1) + i)
+              .focus();
+            break;
+        }
+      };
+
+      let values = new Array(100);
+      for (let i = 0; i < values.length; i++) {
+        values[i] = new Array(100);
+      }
+
+      for (let i = 0; i < 51; i++) {
+        let row = document.createElement("row");
+        document.getElementById("container").append(row);
+        row.innerHTML += `<index>${i}</index>`;
+
+        for (let j = 1; j < 15; j++) {
+          if (i == 0) {
+            row.innerHTML += `<index>${String.fromCharCode(64 + j)}</index>`;
+          } else {
+            let newCell = document.createElement("input");
+            newCell.id = String.fromCharCode(64 + j) + i;
+            newCell.addEventListener("change", onchange);
+            newCell.addEventListener("focus", onfocus);
+            newCell.addEventListener("keydown", onenter);
+            row.append(newCell);
+          }
+        }
+      }
+    </script>
+  </body>
+  <style>
+    row {
+      display: flex;
+      width: fit-content;
+    }
+    index {
+      width: 98px;
+      text-align: center;
+      background-color: lightgray;
+      border: 1px solid gray;
+      position: relative;
+    }
+    input {
+      width: 100px;
+    }
+    input:focus {
+      outline: 3px solid rgb(40, 155, 92);
+      z-index: 1;
+    }
+  </style>
+</html>
